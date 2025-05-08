@@ -243,4 +243,17 @@ textarea {
 /* ==========================================================================
   custom styles
    ========================================================================== */
+body {
+  padding: 0;
+  margin: 0;
+}
 
+header {
+  background-color: #FFD1DC;
+}
+main {
+  background-color: #AEC6CF;
+}
+footer {
+  background-color: #BFD8B8;
+}
