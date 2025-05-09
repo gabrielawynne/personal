@@ -243,18 +243,29 @@ textarea {
 /* ==========================================================================
   custom styles
    ========================================================================== */
-body {
-  padding: 0;
+* {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 header {
-  background-color: #FFD1DC;
+  background-color: #00264e;
+  color: #fff;
+  margin: 0;
+  padding: 0;
 }
 main {
-  background-color: #AEC6CF;
+  background-color: #FFF;
+  margin: 0;
+  padding: 0;
 }
 footer {
-  background-color: #BFD8B8;
-
+  background-color: #232323;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+}
+.offwhite {
+  background-color: #ededed;
 }
