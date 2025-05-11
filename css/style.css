@@ -251,13 +251,14 @@ textarea {
 }
 
 header {
-  background-color: #ededed;
-  color: #ffffff;
-  margin-left: 10em;
-  margin-right: 10em;
-  margin-top: 3em;
-  margin-bottom: 3em;
+  background-color: #ffffff;
+  color: #00264e;
+  width: clamp(70%, 10px, 80%);
+  height: 100px;
+  margin: 0 auto;
+  margin-top: 2em;
   padding: 0;
+  border-radius: 20px;
 }
 
 body {
@@ -288,9 +289,9 @@ footer {
   position: relative;
   background-color: #00264e;
   color: white;
-  padding: 100px 0 0; /* top padding for spacing */
+  padding: 100px 0 100px; /* added bottom padding */
   text-align: center;
-  overflow: hidden; /* ensures SVG doesn't overflow weirdly */
+  overflow: hidden;
 }
 
 .hero .container {
@@ -306,6 +307,7 @@ footer {
   width: 100%;
   height: 100px;
   display: block;
+  pointer-events: none; /* optional: prevents it from interfering with mouse events */
 }
 
 
