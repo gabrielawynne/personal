@@ -265,6 +265,7 @@ header {
 body {
   background-color: #00264e;
   margin-top: 2em;
+  overflow-x: hidden;
 }
 main {
   background-color: #FFF;
@@ -300,6 +301,7 @@ footer {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
+  width: 100%;
 }
 
 .hero svg {
