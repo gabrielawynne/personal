@@ -316,7 +316,7 @@ nav {
   background-color: white; /* Or match your navbar color */
 }
 
-.onscroll+ {
+.onscroll {
   position: sticky;
   top: 0;
   z-index: 1000;
