@@ -258,6 +258,7 @@ header {
   max-width: 1200px;
   padding: 0 20px;
   border-radius: 20px;
+  box-shadow: 0 2px 40px #00264e;
 }
 
 body {
@@ -322,6 +323,9 @@ nav {
   z-index: 1000;
   background: white;
   padding: 10px 0;
+}
+li {
+  list-style-type: none;
 }
 
 
