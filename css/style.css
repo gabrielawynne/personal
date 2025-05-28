@@ -252,18 +252,18 @@ textarea {
 
 header {
   background-color: #ffffff;
-  color: #00264e;
+  color: #6E0B14;
   height: 100px;
   margin: 0 auto;
   width: 1200px;
   padding: 0 20px;
   border-radius: 20px;
-  box-shadow: 0 2px 40px #00264e;
+  box-shadow: 0 2px 40px #6E0B14;
   transition: width 0.5s ease, border-radius 1s ease;
 }
 
 body {
-  background-color: #00264e;
+  background-color: #6E0B14;
   margin-top: 2em;
   overflow-x: hidden;
 }
@@ -290,7 +290,7 @@ footer {
 
 .hero {
   position: relative;
-  background-color: #00264e;
+  background-color: #6E0B14;
   color: white;
   padding: 100px 0 100px;
   text-align: center;
@@ -329,6 +329,16 @@ nav {
 }
 li {
   list-style-type: none;
+}
+
+@media screen and (max-width: 1200px) {
+  header {
+    width: 100%;
+    border-radius: 0;
+  }
+  body {
+    margin-top: 0;
+  }
 }
 
 
