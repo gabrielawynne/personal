@@ -330,6 +330,17 @@ nav {
 li {
   list-style-type: none;
 }
+nav ul {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+nav li {
+  margin-right: 20px; /* spacing between links */
+}
+
 
 @media screen and (max-width: 1200px) {
   header {
