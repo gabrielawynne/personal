@@ -251,35 +251,42 @@ textarea {
 }
 
 header {
-  background-color: #ffffff;
-  color: #6E0B14;
+  background-color: #F5F5F0;
+  color: #1B365D;
   height: 100px;
   margin: 0 auto;
   width: 1200px;
   padding: 0 20px;
   border-radius: 20px;
-  box-shadow: 0 2px 40px #6E0B14;
+  box-shadow: 0 2px 40px #1B365D;
   transition: width 0.5s ease, border-radius 1s ease;
 }
 
+header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+
 body {
-  background-color: #6E0B14;
+  background-color: #1B365D;
   margin-top: 2em;
   overflow-x: hidden;
 }
 main {
-  background-color: #FFF;
+  background-color: #F5F5F0;
   margin: 0;
   padding: 0;
 }
 footer {
   background-color: #232323;
-  color: #fff;
+  color: #F5F5F0;
   margin: 0;
   padding: 0;
 }
 .offwhite {
-  background-color: #ededed;
+  background-color: #F5F5F0;
 }
 
 .container {
@@ -290,9 +297,9 @@ footer {
 
 .hero {
   position: relative;
-  background-color: #6E0B14;
-  color: white;
-  padding: 100px 0 100px;
+  background-color: #1B365D;
+  color: #F5F5F0;
+  padding: 100px 0 200px;
   text-align: center;
   overflow: hidden;
 }
@@ -302,6 +309,7 @@ footer {
   margin: 0 auto;
   padding: 0 20px;
   width: 100%;
+
 }
 
 .hero svg {
@@ -317,14 +325,14 @@ nav {
   position: sticky;
   top: 0;
   z-index: 1000; /* Make sure it stays above content */
-  background-color: white; /* Or match your navbar color */
+  background-color: #F5F5F0; /* Or match your navbar color */
 }
 
 .onscroll {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: white;
+  background: #F5F5F0;
   padding: 10px 0;
 }
 li {
@@ -351,5 +359,3 @@ nav li {
     margin-top: 0;
   }
 }
-
-
