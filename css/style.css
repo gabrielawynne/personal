@@ -243,6 +243,10 @@ textarea {
 /* ==========================================================================
   custom styles
    ========================================================================== */
+
+html.preload * {
+  transition: none !important;
+}
 * {
   margin: 0;
   padding: 0;
@@ -262,14 +266,17 @@ header {
   padding: 0 20px;
   border-radius: 20px;
   box-shadow: 0 2px 40px #1B365D;
-  transition: width 0.5s ease, border-radius 1s ease;
+  transition: width 0.5s ease, border-radius 1s ease, background-color 0.4s ease, box-shadow 0.4s ease;
 }
 
 header .container {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   height: 100%;
+}
+
+header .container > h1 {
+  margin-right: auto;
 }
 
 body {
@@ -289,6 +296,7 @@ main {
   flex: 1;
   display: flex;
   flex-direction: column;
+  transition: background-color 0.4s ease;
 }
 
 main > .container {
@@ -299,6 +307,7 @@ footer {
   color: #F5F5F0;
   margin: 0;
   padding: 40px 0;
+  transition: background-color 0.4s ease;
 }
 
 .footer-inner {
@@ -573,6 +582,7 @@ nav a {
   color: #1B365D;
   text-decoration: none;
   font-weight: 500;
+  transition: color 0.4s ease;
 }
 
 nav a:hover {
@@ -596,7 +606,7 @@ nav a:hover {
   height: 3px;
   background-color: #1B365D;
   border-radius: 2px;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.4s ease;
 }
 
 .hamburger.open span:nth-child(1) {
@@ -655,5 +665,355 @@ nav a:hover {
 
   header {
     position: relative;
+  }
+}
+
+/* ==========================================================================
+   Dark mode toggle button — floats top-right, pops into nav when scrolled
+   ========================================================================== */
+
+.dark-toggle {
+  position: fixed;
+  top: 18px;
+  right: 20px;
+  z-index: 1001;
+  background: rgba(245, 245, 240, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: none;
+  cursor: pointer;
+  color: #1B365D;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.18);
+  transition: top 0.3s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.dark-toggle:hover {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.26);
+}
+
+.dark-toggle svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.icon-sun {
+  display: none;
+}
+
+/* In-nav state — stays fixed but slides to align with the full-width header */
+.header-expanded .dark-toggle {
+  top: 31px; /* vertically centered in the 100px header */
+  background: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+}
+
+.header-expanded .dark-toggle:hover {
+  background-color: rgba(27, 54, 93, 0.1);
+  box-shadow: none;
+}
+
+/* Keep nav links from running under the fixed toggle button */
+.header-expanded header .container {
+  padding-right: 68px;
+}
+
+/* ==========================================================================
+   Star twinkle animations
+   ========================================================================== */
+
+@keyframes twinkle-a {
+  0%, 100% { opacity: 1; }
+  40%       { opacity: 0.15; }
+}
+
+@keyframes twinkle-b {
+  0%, 100% { opacity: 0.25; }
+  55%       { opacity: 1; }
+}
+
+/* ==========================================================================
+   Dark mode styles
+   ========================================================================== */
+
+html.dark body {
+  background:
+    radial-gradient(1px 1px at 15% 40%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 30% 20%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 45% 70%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 60% 35%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 75% 60%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 25%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at  8% 80%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 38% 90%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 52% 15%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 70% 85%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 85% 50%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 25% 55%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 48% 45%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 65% 10%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 92% 70%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    linear-gradient(to right, #010921, #071D2C);
+}
+
+html.dark .hero {
+  background: linear-gradient(to right, #010921, #071D2C);
+  isolation: isolate;
+}
+
+html.dark .hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(1px 1px at  5% 15%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.8) 0%, transparent 100%),
+    radial-gradient(2px 2px at 35% 20%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 50% 40%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 65% 75%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(2px 2px at 78% 25%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 45%, rgba(255,255,255,0.8) 0%, transparent 100%),
+    radial-gradient(1px 1px at  8% 50%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(2px 2px at 45%  5%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 68% 35%, rgba(255,255,255,0.4) 0%, transparent 100%);
+  animation: twinkle-a 3s ease-in-out infinite;
+}
+
+html.dark .hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(2px 2px at 12% 70%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 28% 85%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 42% 60%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(2px 2px at 58% 10%, rgba(255,255,255,0.8) 0%, transparent 100%),
+    radial-gradient(1px 1px at 72% 50%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 85% 80%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(2px 2px at 95% 15%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 22% 90%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 55% 88%, rgba(255,255,255,0.8) 0%, transparent 100%),
+    radial-gradient(2px 2px at 82% 65%, rgba(255,255,255,0.6) 0%, transparent 100%);
+  animation: twinkle-b 4.5s ease-in-out infinite 1.2s;
+}
+
+html.dark .page-banner {
+  background: linear-gradient(to right, #010921, #071D2C);
+  isolation: isolate;
+}
+
+html.dark .page-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(1px 1px at  7% 20%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 22% 55%, rgba(255,255,255,0.8) 0%, transparent 100%),
+    radial-gradient(2px 2px at 38% 15%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 52% 75%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 67% 30%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(2px 2px at 80% 65%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 93% 40%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 14% 85%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(2px 2px at 47% 50%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 73% 10%, rgba(255,255,255,0.8) 0%, transparent 100%);
+  animation: twinkle-a 3.5s ease-in-out infinite 0.5s;
+}
+
+html.dark .page-banner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(2px 2px at 10% 45%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 30% 80%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 44% 25%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(2px 2px at 60% 60%, rgba(255,255,255,0.8) 0%, transparent 100%),
+    radial-gradient(1px 1px at 75% 90%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 88% 20%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(2px 2px at 18% 35%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 35% 70%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 58% 8%,  rgba(255,255,255,0.8) 0%, transparent 100%),
+    radial-gradient(2px 2px at 85% 50%, rgba(255,255,255,0.6) 0%, transparent 100%);
+  animation: twinkle-b 5s ease-in-out infinite 2s;
+}
+
+html.dark header {
+  background-color: #030F18;
+  box-shadow: 0 2px 40px rgba(255, 255, 255, 0.15);
+}
+
+html.dark .onscroll {
+  background: #030F18;
+}
+
+html.dark header h1 {
+  color: #e6edf3;
+}
+
+html.dark header h1 a {
+  color: #e6edf3;
+}
+
+html.dark nav a {
+  color: #e6edf3;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-shadow: 0 0 0 #e6edf3;
+}
+
+html.dark .hamburger span {
+  background-color: #e6edf3;
+}
+
+html.dark .dark-toggle {
+  color: #e6edf3;
+  background: rgba(30, 36, 51, 0.88);
+}
+
+html.dark .header-expanded .dark-toggle {
+  background: none;
+}
+
+html.dark .header-expanded .dark-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+html.dark .icon-moon {
+  display: none;
+}
+
+html.dark .icon-sun {
+  display: block;
+}
+
+html.dark nav {
+  background: #030F18;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+html.dark nav li {
+  border-bottom-color: #2d3748;
+}
+
+html.dark main {
+  background-color: #030F18;
+}
+
+html.dark main .container section {
+  border-bottom-color: #21262d;
+}
+
+html.dark main .container section h2 {
+  color: #7aa2f7;
+}
+
+html.dark main .container section p {
+  color: #c9d1d9;
+}
+
+/* Light mode default for CSS-controlled wave paths */
+.hero .wave path,
+.page-banner .wave path {
+  fill: #F5F5F0;
+}
+
+.wave path {
+  transition: fill 0.4s ease;
+}
+
+html.dark .hero .wave path {
+  fill: #030F18;
+}
+
+html.dark .page-banner .wave path {
+  fill: #030F18;
+}
+
+html.dark main > .wave path {
+  fill: #01060A;
+}
+
+html.dark .resume-block h3 {
+  color: #7aa2f7;
+  border-bottom-color: #7aa2f7;
+}
+
+html.dark .resume-date {
+  color: #8b949e;
+}
+
+html.dark .resume-company {
+  color: #8b949e;
+}
+
+html.dark .resume-entry p,
+html.dark .resume-bullets li {
+  color: #c9d1d9;
+}
+
+html.dark .resume-skills li {
+  background-color: #21262d;
+  color: #e6edf3;
+}
+
+html.dark .resume-skills-label {
+  color: #7aa2f7;
+}
+
+html.dark footer {
+  background-color: #01060A;
+}
+
+/* ==========================================================================
+   Mobile — toggle moves to bottom-right corner
+   ========================================================================== */
+
+@media screen and (max-width: 768px) {
+  .dark-toggle,
+  .header-expanded .dark-toggle {
+    top: auto;
+    bottom: 24px;
+    background: rgba(245, 245, 240, 0.88);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.18);
+  }
+
+  .dark-toggle:hover,
+  .header-expanded .dark-toggle:hover {
+    background: rgba(245, 245, 240, 1);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.26);
+  }
+
+  /* Reset the nav-protection padding since toggle is no longer in the header area */
+  .header-expanded header .container {
+    padding-right: 20px;
+  }
+
+  html.dark .dark-toggle,
+  html.dark .header-expanded .dark-toggle {
+    background: rgba(30, 36, 51, 0.88);
+  }
+
+  html.dark .dark-toggle:hover,
+  html.dark .header-expanded .dark-toggle:hover {
+    background: rgba(30, 36, 51, 1);
   }
 }
