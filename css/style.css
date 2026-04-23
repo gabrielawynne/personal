@@ -723,7 +723,7 @@ nav a:hover {
 
 /* Keep nav links from running under the fixed toggle button */
 .header-expanded header .container {
-  padding-right: 68px;
+  padding-right: 20px;
 }
 
 /* ==========================================================================
