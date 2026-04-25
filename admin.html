@@ -84,10 +84,7 @@
       font-size: 1rem;
       margin-bottom: 4px;
     }
-    .project-item-tags {
-      font-size: 0.8rem;
-      color: #999;
-    }
+    .project-item-tags { font-size: 0.8rem; color: #999; }
     .project-item-btns { display: flex; gap: 8px; flex-shrink: 0; }
     .btn-edit, .btn-delete {
       padding: 6px 16px;
@@ -103,19 +100,61 @@
     .btn-edit:hover { background: #1B365D; color: #F5F5F0; }
     .btn-delete { color: #c0392b; border-color: #c0392b; background: none; }
     .btn-delete:hover { background: #c0392b; color: #fff; }
-    .status-msg {
-      font-size: 0.9rem;
-      font-weight: 500;
-      min-height: 1.2em;
-    }
+    .status-msg { font-size: 0.9rem; font-weight: 500; min-height: 1.2em; }
     .status-success { color: #27ae60; }
     .status-error { color: #c0392b; }
     .status-neutral { color: #999; }
     .empty-state { color: #999; font-style: italic; padding: 16px 0; }
-    html.dark .admin-card {
-      background: #0d1b2a;
-      border-color: #21262d;
+    /* Image field */
+    .image-browse-row { display: flex; gap: 10px; align-items: center; }
+    .image-preview-wrap { display: none; margin-top: 10px; align-items: center; gap: 12px; }
+    .image-preview-wrap img { max-height: 80px; max-width: 160px; border-radius: 8px; border: 1px solid #e8e8e2; object-fit: cover; }
+    .image-preview-actions { display: flex; flex-direction: column; gap: 6px; }
+    .btn-sm { padding: 6px 14px !important; font-size: 0.8rem !important; }
+    /* Crop modal */
+    #crop-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
     }
+    #crop-inner {
+      background: #1a1a2e;
+      border-radius: 16px;
+      padding: 24px;
+      max-width: 90vw;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow: auto;
+    }
+    #crop-header { display: flex; justify-content: space-between; align-items: center; }
+    #crop-header .crop-title { color: #e6edf3; font-weight: 600; font-size: 1rem; font-family: 'Outfit', sans-serif; }
+    #crop-header .crop-hint  { color: #8b949e; font-size: 0.85rem; font-family: 'Outfit', sans-serif; }
+    #crop-stage {
+      position: relative;
+      cursor: crosshair;
+      user-select: none;
+      -webkit-user-select: none;
+      line-height: 0;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    #crop-sel {
+      display: none;
+      position: absolute;
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 9999px rgba(0,0,0,0.55);
+      pointer-events: none;
+      box-sizing: border-box;
+    }
+    #crop-footer { display: flex; gap: 12px; }
+    /* Dark mode */
+    html.dark .admin-card { background: #0d1b2a; border-color: #21262d; }
     html.dark .admin-card h3 { color: #7aa2f7; }
     html.dark .admin-top h2 { color: #e6edf3; }
     html.dark .project-item { border-bottom-color: #21262d; }
@@ -125,6 +164,7 @@
     html.dark .btn-secondary:hover { border-color: #8b949e; color: #c9d1d9; }
     html.dark .btn-edit { color: #7aa2f7; border-color: #7aa2f7; }
     html.dark .btn-edit:hover { background: #7aa2f7; color: #010921; }
+    html.dark .image-preview-wrap img { border-color: #21262d; }
     @media (max-width: 600px) {
       .admin-form-row { grid-template-columns: 1fr; }
     }
@@ -189,9 +229,20 @@
                 <input type="text" id="proj-tags" placeholder="Java, Python, React">
               </div>
               <div class="form-group">
-                <label for="proj-image">Image URL <span style="font-weight:400;text-transform:none;letter-spacing:0;color:#aaa;">(optional)</span></label>
-                <input type="url" id="proj-image" placeholder="https://...">
+                <label>Image <span style="font-weight:400;text-transform:none;letter-spacing:0;color:#aaa;">(optional)</span></label>
+                <div class="image-browse-row">
+                  <button type="button" id="browse-btn" class="btn-secondary" style="white-space:nowrap;">Browse & Crop</button>
+                  <input type="url" id="proj-image" placeholder="Or paste a URL" style="flex:1;">
+                </div>
+                <div id="image-preview-wrap" class="image-preview-wrap">
+                  <img id="image-preview" alt="Preview">
+                  <div class="image-preview-actions">
+                    <button type="button" id="recrop-btn" class="btn-secondary btn-sm">Re-crop</button>
+                    <button type="button" id="clear-image-btn" class="btn-secondary btn-sm">Clear</button>
+                  </div>
+                </div>
               </div>
+              <input type="file" id="image-file-input" accept="image/*" style="display:none;">
               <div class="admin-form-row">
                 <div class="form-group">
                   <label for="proj-github">GitHub URL</label>
@@ -221,6 +272,24 @@
     </div>
   </main>
 
+  <!-- Crop modal -->
+  <div id="crop-modal">
+    <div id="crop-inner">
+      <div id="crop-header">
+        <span class="crop-title">Crop Image</span>
+        <span class="crop-hint">Drag to select an area</span>
+      </div>
+      <div id="crop-stage">
+        <canvas id="crop-canvas"></canvas>
+        <div id="crop-sel"></div>
+      </div>
+      <div id="crop-footer">
+        <button type="button" id="crop-confirm-btn" class="form-submit">Crop & Use</button>
+        <button type="button" id="crop-cancel-btn" class="btn-secondary">Cancel</button>
+      </div>
+    </div>
+  </div>
+
   <script src="js/main.js"></script>
   <script>
     const OWNER  = 'gabrielawynne';
@@ -234,6 +303,17 @@
     let fileSha  = '';
     let editIdx  = null;
 
+    // Crop / image state
+    let cropFile     = null;
+    let cropImg      = null;
+    let cropResult   = null;
+    let cropPrevUrl  = null;
+    let cropScale    = 1;
+    let cropSel      = { x: 0, y: 0, w: 0, h: 0 };
+    let cropDragging  = false;
+    let cropDragStart = { x: 0, y: 0 };
+
+    // Existing DOM refs
     const setupSection  = document.getElementById('setup-section');
     const adminPanel    = document.getElementById('admin-panel');
     const tokenInput    = document.getElementById('token-input');
@@ -247,6 +327,22 @@
     const cancelBtn     = document.getElementById('cancel-btn');
     const saveStatus    = document.getElementById('save-status');
 
+    // Image / crop DOM refs
+    const fileInput        = document.getElementById('image-file-input');
+    const browseBtn        = document.getElementById('browse-btn');
+    const recropBtn        = document.getElementById('recrop-btn');
+    const clearImageBtn    = document.getElementById('clear-image-btn');
+    const imagePreviewWrap = document.getElementById('image-preview-wrap');
+    const imagePreview     = document.getElementById('image-preview');
+    const projImageUrl     = document.getElementById('proj-image');
+    const cropModal        = document.getElementById('crop-modal');
+    const cropStage        = document.getElementById('crop-stage');
+    const cropCanvas       = document.getElementById('crop-canvas');
+    const cropSelDiv       = document.getElementById('crop-sel');
+    const cropConfirmBtn   = document.getElementById('crop-confirm-btn');
+    const cropCancelBtn    = document.getElementById('crop-cancel-btn');
+
+    // ── GitHub helpers ──────────────────────────────────────────────────────
     async function apiFetch(method, body) {
       const opts = {
         method,
@@ -274,6 +370,30 @@
       fileSha = data.content.sha;
     }
 
+    async function uploadImageToGitHub(blob, filename) {
+      const base64 = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload  = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+      const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/img/${filename}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message: `Upload image: ${filename}`, content: base64, branch: BRANCH })
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || `Image upload failed: ${res.status}`);
+      }
+      return `img/${filename}`;
+    }
+
+    // ── UI helpers ──────────────────────────────────────────────────────────
     function renderList() {
       if (!projects.length) {
         projectList.innerHTML = '<p class="empty-state">No projects yet. Add one above.</p>';
@@ -294,28 +414,180 @@
     }
 
     function setStatus(msg, type) {
-      saveStatus.textContent  = msg;
-      saveStatus.className    = `status-msg status-${type}`;
+      saveStatus.textContent = msg;
+      saveStatus.className   = `status-msg status-${type}`;
       if (type !== 'neutral') setTimeout(() => { saveStatus.textContent = ''; }, 4000);
+    }
+
+    function showPreview(src) {
+      imagePreview.src = src;
+      imagePreviewWrap.style.display = 'flex';
+    }
+
+    function clearImageState() {
+      cropResult = null;
+      cropFile   = null;
+      if (cropPrevUrl) { URL.revokeObjectURL(cropPrevUrl); cropPrevUrl = null; }
+      imagePreview.src = '';
+      imagePreviewWrap.style.display = 'none';
+      projImageUrl.value = '';
+      fileInput.value    = '';
     }
 
     function resetForm() {
       projectForm.reset();
-      editIdx            = null;
+      editIdx                 = null;
       formHeading.textContent = 'Add Project';
       submitBtn.textContent   = 'Add Project';
       cancelBtn.style.display = 'none';
+      clearImageState();
     }
 
+    // ── Crop modal ──────────────────────────────────────────────────────────
+    function renderCropSel() {
+      if (cropSel.w < 2 || cropSel.h < 2) { cropSelDiv.style.display = 'none'; return; }
+      cropSelDiv.style.display = 'block';
+      cropSelDiv.style.left    = cropSel.x + 'px';
+      cropSelDiv.style.top     = cropSel.y + 'px';
+      cropSelDiv.style.width   = cropSel.w + 'px';
+      cropSelDiv.style.height  = cropSel.h + 'px';
+    }
+
+    function getCropPos(e) {
+      const rect = cropStage.getBoundingClientRect();
+      const src  = e.touches ? e.touches[0] : e;
+      return {
+        x: Math.max(0, Math.min(src.clientX - rect.left, cropCanvas.width)),
+        y: Math.max(0, Math.min(src.clientY - rect.top,  cropCanvas.height))
+      };
+    }
+
+    function openCropModal(file) {
+      cropFile = file;
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        cropImg = img;
+        const maxW = Math.min(window.innerWidth  - 80, 800);
+        const maxH = Math.min(window.innerHeight - 200, 550);
+        cropScale = Math.min(1, maxW / img.naturalWidth, maxH / img.naturalHeight);
+        const dw = Math.round(img.naturalWidth  * cropScale);
+        const dh = Math.round(img.naturalHeight * cropScale);
+        cropCanvas.width  = dw;
+        cropCanvas.height = dh;
+        cropCanvas.style.width  = dw + 'px';
+        cropCanvas.style.height = dh + 'px';
+        cropCanvas.getContext('2d').drawImage(img, 0, 0, dw, dh);
+        cropSel = { x: 0, y: 0, w: dw, h: dh };
+        renderCropSel();
+        cropModal.style.display = 'flex';
+        URL.revokeObjectURL(url);
+      };
+      img.src = url;
+    }
+
+    cropStage.addEventListener('mousedown', e => {
+      cropDragStart = getCropPos(e);
+      cropSel = { x: cropDragStart.x, y: cropDragStart.y, w: 0, h: 0 };
+      cropDragging = true;
+    });
+    cropStage.addEventListener('mousemove', e => {
+      if (!cropDragging) return;
+      const p = getCropPos(e);
+      cropSel = {
+        x: Math.min(p.x, cropDragStart.x),
+        y: Math.min(p.y, cropDragStart.y),
+        w: Math.abs(p.x - cropDragStart.x),
+        h: Math.abs(p.y - cropDragStart.y)
+      };
+      renderCropSel();
+    });
+    cropStage.addEventListener('mouseup',    () => { cropDragging = false; });
+    cropStage.addEventListener('mouseleave', () => { cropDragging = false; });
+
+    cropStage.addEventListener('touchstart', e => {
+      e.preventDefault();
+      cropDragStart = getCropPos(e);
+      cropSel = { x: cropDragStart.x, y: cropDragStart.y, w: 0, h: 0 };
+      cropDragging = true;
+    }, { passive: false });
+    cropStage.addEventListener('touchmove', e => {
+      e.preventDefault();
+      if (!cropDragging) return;
+      const p = getCropPos(e);
+      cropSel = {
+        x: Math.min(p.x, cropDragStart.x),
+        y: Math.min(p.y, cropDragStart.y),
+        w: Math.abs(p.x - cropDragStart.x),
+        h: Math.abs(p.y - cropDragStart.y)
+      };
+      renderCropSel();
+    }, { passive: false });
+    cropStage.addEventListener('touchend', () => { cropDragging = false; });
+
+    cropConfirmBtn.addEventListener('click', () => {
+      const hasSel = cropSel.w > 4 && cropSel.h > 4;
+      const srcX   = hasSel ? Math.round(cropSel.x / cropScale) : 0;
+      const srcY   = hasSel ? Math.round(cropSel.y / cropScale) : 0;
+      const srcW   = hasSel ? Math.round(cropSel.w / cropScale) : cropImg.naturalWidth;
+      const srcH   = hasSel ? Math.round(cropSel.h / cropScale) : cropImg.naturalHeight;
+      const outW   = Math.min(srcW, 1200);
+      const outH   = Math.round(srcH * (outW / srcW));
+      const out    = document.createElement('canvas');
+      out.width    = outW;
+      out.height   = outH;
+      out.getContext('2d').drawImage(cropImg, srcX, srcY, srcW, srcH, 0, 0, outW, outH);
+      out.toBlob(blob => {
+        cropResult = blob;
+        if (cropPrevUrl) URL.revokeObjectURL(cropPrevUrl);
+        cropPrevUrl = URL.createObjectURL(blob);
+        showPreview(cropPrevUrl);
+        projImageUrl.value = '';
+        cropModal.style.display = 'none';
+      }, 'image/jpeg', 0.92);
+    });
+
+    cropCancelBtn.addEventListener('click', () => { cropModal.style.display = 'none'; });
+
+    browseBtn.addEventListener('click',     () => fileInput.click());
+    recropBtn.addEventListener('click',     () => { if (cropFile) openCropModal(cropFile); });
+    clearImageBtn.addEventListener('click', clearImageState);
+
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files[0]) openCropModal(fileInput.files[0]);
+    });
+
+    projImageUrl.addEventListener('input', () => {
+      const val = projImageUrl.value.trim();
+      if (val) {
+        cropResult = null;
+        if (cropPrevUrl) { URL.revokeObjectURL(cropPrevUrl); cropPrevUrl = null; }
+        showPreview(val);
+      } else {
+        imagePreview.src = '';
+        imagePreviewWrap.style.display = 'none';
+      }
+    });
+
+    // ── Project CRUD ────────────────────────────────────────────────────────
     window.startEdit = function(i) {
       const p = projects[i];
       editIdx = i;
       document.getElementById('proj-title').value  = p.title;
       document.getElementById('proj-desc').value   = p.description;
       document.getElementById('proj-tags').value   = p.tags.join(', ');
-      document.getElementById('proj-image').value  = p.image   || '';
-      document.getElementById('proj-github').value = p.github  || '';
-      document.getElementById('proj-demo').value   = p.demo    || '';
+      projImageUrl.value = p.image || '';
+      document.getElementById('proj-github').value = p.github || '';
+      document.getElementById('proj-demo').value   = p.demo   || '';
+
+      cropResult = null;
+      cropFile   = null;
+      if (cropPrevUrl) { URL.revokeObjectURL(cropPrevUrl); cropPrevUrl = null; }
+      fileInput.value = '';
+
+      if (p.image) showPreview(p.image);
+      else { imagePreview.src = ''; imagePreviewWrap.style.display = 'none'; }
+
       formHeading.textContent    = 'Edit Project';
       submitBtn.textContent      = 'Save Changes';
       cancelBtn.style.display    = 'inline-block';
@@ -338,12 +610,30 @@
 
     projectForm.addEventListener('submit', async e => {
       e.preventDefault();
+      submitBtn.disabled = true;
+
+      let imageValue = projImageUrl.value.trim() || null;
+
+      if (cropResult) {
+        setStatus('Uploading image…', 'neutral');
+        try {
+          const ext  = cropResult.type === 'image/png' ? 'png' : 'jpg';
+          const slug = document.getElementById('proj-title').value.trim()
+            .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'project';
+          imageValue = await uploadImageToGitHub(cropResult, `${Date.now()}-${slug}.${ext}`);
+        } catch (err) {
+          setStatus(`Image upload failed: ${err.message}`, 'error');
+          submitBtn.disabled = false;
+          return;
+        }
+      }
+
       const project = {
         id:          editIdx !== null ? projects[editIdx].id : Date.now(),
         title:       document.getElementById('proj-title').value.trim(),
         description: document.getElementById('proj-desc').value.trim(),
         tags:        document.getElementById('proj-tags').value.split(',').map(t => t.trim()).filter(Boolean),
-        image:       document.getElementById('proj-image').value.trim()  || null,
+        image:       imageValue,
         github:      document.getElementById('proj-github').value.trim() || null,
         demo:        document.getElementById('proj-demo').value.trim()   || null,
       };
@@ -351,15 +641,14 @@
       if (editIdx !== null) projects[editIdx] = project;
       else projects.push(project);
 
-      submitBtn.disabled = true;
       setStatus('Saving…', 'neutral');
       try {
         await commitProjects(editIdx !== null ? `Update "${project.title}"` : `Add "${project.title}"`);
         resetForm();
         renderList();
         setStatus('Saved!', 'success');
-      } catch (e) {
-        setStatus(e.message, 'error');
+      } catch (err) {
+        setStatus(err.message, 'error');
       } finally {
         submitBtn.disabled = false;
       }
@@ -370,7 +659,7 @@
     disconnectBtn.addEventListener('click', () => {
       localStorage.removeItem('gh_admin_token');
       token = '';
-      adminPanel.style.display  = 'none';
+      adminPanel.style.display   = 'none';
       setupSection.style.display = 'block';
     });
 
@@ -378,8 +667,8 @@
       const t = tokenInput.value.trim();
       if (!t) return;
       token = t;
-      connectBtn.textContent  = 'Connecting…';
-      connectBtn.disabled     = true;
+      connectBtn.textContent     = 'Connecting…';
+      connectBtn.disabled        = true;
       connectError.style.display = 'none';
       try {
         await loadProjects();
