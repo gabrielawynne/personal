@@ -1,0 +1,11 @@
+[
+  {
+    "id": 1,
+    "title": "Multiplayer Checkers",
+    "description": "A full-stack multiplayer checkers game enabling real-time player interactions via WebSockets.\n\nDesigned persistent data storage using SQLite for user profiles, match history, and session tracking. Utilized Gson for JSON serialization to handle structured client-server communication.\n\nCollaborated in a team of 4 using Git, Agile methods, and modular design principles.",
+    "tags": ["Java", "SQLite", "WebSockets", "Gson"],
+    "github": "https://github.com/gabrielawynne",
+    "demo": null,
+    "image": null
+  }
+]

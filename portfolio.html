@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gabriel Wynne's Website</title>
+  <title>Portfolio — Gabriel Wynne</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -19,33 +19,22 @@
       document.documentElement.classList.add('preload');
     })();
   </script>
-  <meta name="description" content="">
-
-  <meta property="og:title" content="">
-  <meta property="og:type" content="">
-  <meta property="og:url" content="">
-  <meta property="og:image" content="">
-  <meta property="og:image:alt" content="">
-
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icon.png">
-
-  <link rel="manifest" href="site.webmanifest">
-  <meta name="theme-color" content="#fafafa">
 </head>
 
 <body>
   <header class="onscroll">
     <div class="container">
-      <h1>gabrielwynne.com</h1>
+      <h1><a href="index.html" style="text-decoration:none;color:inherit;">gabrielwynne.com</a></h1>
       <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
       <nav>
         <ul>
-          <li><a href="#home">Home</a></li>
-          <li><a href="#about">About</a></li>
+          <li><a href="index.html#home">Home</a></li>
+          <li><a href="index.html#about">About</a></li>
           <li><a href="portfolio.html">Portfolio</a></li>
           <li><a href="resume.html">Resume</a></li>
           <li><a href="contact.html">Contact</a></li>
@@ -58,28 +47,21 @@
     </div>
   </header>
   <main>
-    <section id="home" class="hero">
+    <section class="page-banner">
       <span class="shooting-star s1"></span>
       <span class="shooting-star s2"></span>
       <span class="shooting-star s3"></span>
-      <span class="shooting-star s4"></span>
-      <span class="shooting-star s5"></span>
       <div class="container">
-        <h1>Gabriel Wynne</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
-        <a href="#about">About Me</a>
+        <h1>Portfolio</h1>
       </div>
-        <svg class="wave" viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-          <path d="M 0 160 C 450 552 1099 -189 1440 160 L 1440 369 L 0 369 Z" />
-        </svg>
-
+      <svg class="wave" viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <path d="M 0 160 C 450 552 1099 -189 1440 160 L 1440 369 L 0 369 Z" />
+      </svg>
     </section>
     <div class="container">
-      <section id="about">
-        <h2>About</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-        <br>
-        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      <section id="portfolio">
+        <h2>Projects</h2>
+        <div id="portfolio-grid" class="portfolio-grid"></div>
       </section>
     </div>
     <svg class="wave" viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">

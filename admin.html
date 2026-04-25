@@ -1,0 +1,416 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin — Gabriel Wynne</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    (function () {
+      const saved = localStorage.getItem('darkMode');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'true' || (saved === null && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      }
+      document.documentElement.classList.add('preload');
+    })();
+  </script>
+  <style>
+    .admin-section { padding: 60px 0; }
+    .admin-card {
+      background: #fff;
+      border: 1px solid #e8e8e2;
+      border-radius: 16px;
+      padding: 36px;
+      box-shadow: 0 2px 12px rgba(27,54,93,0.07);
+      margin-bottom: 28px;
+    }
+    .admin-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #1B365D;
+      margin-bottom: 24px;
+    }
+    .admin-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 40px;
+    }
+    .admin-top h2 { color: #1B365D; margin: 0; }
+    .admin-form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .admin-form-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-top: 4px;
+    }
+    .btn-secondary {
+      padding: 12px 24px;
+      background: none;
+      border: 1.5px solid #ccc;
+      border-radius: 50px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #666;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-secondary:hover { border-color: #999; color: #333; }
+    .project-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0;
+      border-bottom: 1px solid #e8e8e2;
+      gap: 16px;
+    }
+    .project-item:last-child { border-bottom: none; }
+    .project-item-info { flex: 1; min-width: 0; }
+    .project-item-info strong {
+      display: block;
+      color: #1B365D;
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+    .project-item-tags {
+      font-size: 0.8rem;
+      color: #999;
+    }
+    .project-item-btns { display: flex; gap: 8px; flex-shrink: 0; }
+    .btn-edit, .btn-delete {
+      padding: 6px 16px;
+      border-radius: 50px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1.5px solid;
+      transition: background-color 0.2s, color 0.2s;
+    }
+    .btn-edit { color: #1B365D; border-color: #1B365D; background: none; }
+    .btn-edit:hover { background: #1B365D; color: #F5F5F0; }
+    .btn-delete { color: #c0392b; border-color: #c0392b; background: none; }
+    .btn-delete:hover { background: #c0392b; color: #fff; }
+    .status-msg {
+      font-size: 0.9rem;
+      font-weight: 500;
+      min-height: 1.2em;
+    }
+    .status-success { color: #27ae60; }
+    .status-error { color: #c0392b; }
+    .status-neutral { color: #999; }
+    .empty-state { color: #999; font-style: italic; padding: 16px 0; }
+    html.dark .admin-card {
+      background: #0d1b2a;
+      border-color: #21262d;
+    }
+    html.dark .admin-card h3 { color: #7aa2f7; }
+    html.dark .admin-top h2 { color: #e6edf3; }
+    html.dark .project-item { border-bottom-color: #21262d; }
+    html.dark .project-item-info strong { color: #7aa2f7; }
+    html.dark .project-item-tags { color: #8b949e; }
+    html.dark .btn-secondary { border-color: #4a5568; color: #8b949e; }
+    html.dark .btn-secondary:hover { border-color: #8b949e; color: #c9d1d9; }
+    html.dark .btn-edit { color: #7aa2f7; border-color: #7aa2f7; }
+    html.dark .btn-edit:hover { background: #7aa2f7; color: #010921; }
+    @media (max-width: 600px) {
+      .admin-form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="onscroll">
+    <div class="container">
+      <h1><a href="index.html" style="text-decoration:none;color:inherit;">gabrielwynne.com</a></h1>
+      <button class="dark-toggle" aria-label="Toggle dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="admin-section">
+
+        <!-- Token setup -->
+        <div id="setup-section">
+          <div class="admin-top">
+            <h2>Admin</h2>
+          </div>
+          <div class="admin-card">
+            <h3>Connect GitHub</h3>
+            <p style="margin-bottom:20px;color:#555;">Enter a GitHub Personal Access Token with <strong>repo</strong> write access. It's stored only in your browser.</p>
+            <div class="form-group" style="max-width:480px;">
+              <label for="token-input">Personal Access Token</label>
+              <input type="password" id="token-input" placeholder="ghp_...">
+            </div>
+            <div style="display:flex;align-items:center;gap:16px;margin-top:8px;">
+              <button id="connect-btn" class="form-submit">Connect</button>
+              <span id="connect-error" class="status-msg status-error" style="display:none;"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin panel -->
+        <div id="admin-panel" style="display:none;">
+          <div class="admin-top">
+            <h2>Portfolio Projects</h2>
+            <button id="disconnect-btn" class="btn-secondary">Disconnect</button>
+          </div>
+
+          <!-- Add / Edit form -->
+          <div class="admin-card">
+            <h3 id="form-heading">Add Project</h3>
+            <form id="project-form">
+              <div class="form-group">
+                <label for="proj-title">Title</label>
+                <input type="text" id="proj-title" required placeholder="Project name">
+              </div>
+              <div class="form-group">
+                <label for="proj-desc">Description</label>
+                <textarea id="proj-desc" required placeholder="What does it do?" rows="3"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="proj-tags">Tags <span style="font-weight:400;text-transform:none;letter-spacing:0;color:#aaa;">(comma-separated)</span></label>
+                <input type="text" id="proj-tags" placeholder="Java, Python, React">
+              </div>
+              <div class="form-group">
+                <label for="proj-image">Image URL <span style="font-weight:400;text-transform:none;letter-spacing:0;color:#aaa;">(optional)</span></label>
+                <input type="url" id="proj-image" placeholder="https://...">
+              </div>
+              <div class="admin-form-row">
+                <div class="form-group">
+                  <label for="proj-github">GitHub URL</label>
+                  <input type="url" id="proj-github" placeholder="https://github.com/...">
+                </div>
+                <div class="form-group">
+                  <label for="proj-demo">Demo URL</label>
+                  <input type="url" id="proj-demo" placeholder="https://...">
+                </div>
+              </div>
+              <div class="admin-form-actions">
+                <button type="submit" class="form-submit" id="submit-btn">Add Project</button>
+                <button type="button" id="cancel-btn" class="btn-secondary" style="display:none;">Cancel</button>
+                <span id="save-status" class="status-msg"></span>
+              </div>
+            </form>
+          </div>
+
+          <!-- Project list -->
+          <div class="admin-card">
+            <h3>Current Projects</h3>
+            <div id="project-list"><p class="empty-state">Loading...</p></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script src="js/main.js"></script>
+  <script>
+    const OWNER  = 'gabrielawynne';
+    const REPO   = 'personal';
+    const FILE   = 'js/projects.json';
+    const BRANCH = 'master';
+    const API    = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE}`;
+
+    let token    = localStorage.getItem('gh_admin_token') || '';
+    let projects = [];
+    let fileSha  = '';
+    let editIdx  = null;
+
+    const setupSection  = document.getElementById('setup-section');
+    const adminPanel    = document.getElementById('admin-panel');
+    const tokenInput    = document.getElementById('token-input');
+    const connectBtn    = document.getElementById('connect-btn');
+    const connectError  = document.getElementById('connect-error');
+    const disconnectBtn = document.getElementById('disconnect-btn');
+    const projectForm   = document.getElementById('project-form');
+    const projectList   = document.getElementById('project-list');
+    const formHeading   = document.getElementById('form-heading');
+    const submitBtn     = document.getElementById('submit-btn');
+    const cancelBtn     = document.getElementById('cancel-btn');
+    const saveStatus    = document.getElementById('save-status');
+
+    async function apiFetch(method, body) {
+      const opts = {
+        method,
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json'
+        }
+      };
+      if (body) opts.body = JSON.stringify(body);
+      const res = await fetch(API, opts);
+      if (!res.ok) throw new Error(`GitHub API ${res.status}`);
+      return res.json();
+    }
+
+    async function loadProjects() {
+      const data = await apiFetch('GET');
+      fileSha  = data.sha;
+      projects = JSON.parse(atob(data.content.replace(/\n/g, '')));
+    }
+
+    async function commitProjects(message) {
+      const content = btoa(unescape(encodeURIComponent(JSON.stringify(projects, null, 2))));
+      const data = await apiFetch('PUT', { message, content, sha: fileSha, branch: BRANCH });
+      fileSha = data.content.sha;
+    }
+
+    function renderList() {
+      if (!projects.length) {
+        projectList.innerHTML = '<p class="empty-state">No projects yet. Add one above.</p>';
+        return;
+      }
+      projectList.innerHTML = projects.map((p, i) => `
+        <div class="project-item">
+          <div class="project-item-info">
+            <strong>${p.title}</strong>
+            <span class="project-item-tags">${p.tags.join(' · ') || 'No tags'}</span>
+          </div>
+          <div class="project-item-btns">
+            <button class="btn-edit" onclick="startEdit(${i})">Edit</button>
+            <button class="btn-delete" onclick="deleteProject(${i})">Delete</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function setStatus(msg, type) {
+      saveStatus.textContent  = msg;
+      saveStatus.className    = `status-msg status-${type}`;
+      if (type !== 'neutral') setTimeout(() => { saveStatus.textContent = ''; }, 4000);
+    }
+
+    function resetForm() {
+      projectForm.reset();
+      editIdx            = null;
+      formHeading.textContent = 'Add Project';
+      submitBtn.textContent   = 'Add Project';
+      cancelBtn.style.display = 'none';
+    }
+
+    window.startEdit = function(i) {
+      const p = projects[i];
+      editIdx = i;
+      document.getElementById('proj-title').value  = p.title;
+      document.getElementById('proj-desc').value   = p.description;
+      document.getElementById('proj-tags').value   = p.tags.join(', ');
+      document.getElementById('proj-image').value  = p.image   || '';
+      document.getElementById('proj-github').value = p.github  || '';
+      document.getElementById('proj-demo').value   = p.demo    || '';
+      formHeading.textContent    = 'Edit Project';
+      submitBtn.textContent      = 'Save Changes';
+      cancelBtn.style.display    = 'inline-block';
+      projectForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    window.deleteProject = async function(i) {
+      if (!confirm(`Delete "${projects[i].title}"?`)) return;
+      const title = projects[i].title;
+      projects.splice(i, 1);
+      try {
+        setStatus('Saving…', 'neutral');
+        await commitProjects(`Remove "${title}"`);
+        renderList();
+        setStatus('Deleted.', 'success');
+      } catch (e) {
+        setStatus(e.message, 'error');
+      }
+    };
+
+    projectForm.addEventListener('submit', async e => {
+      e.preventDefault();
+      const project = {
+        id:          editIdx !== null ? projects[editIdx].id : Date.now(),
+        title:       document.getElementById('proj-title').value.trim(),
+        description: document.getElementById('proj-desc').value.trim(),
+        tags:        document.getElementById('proj-tags').value.split(',').map(t => t.trim()).filter(Boolean),
+        image:       document.getElementById('proj-image').value.trim()  || null,
+        github:      document.getElementById('proj-github').value.trim() || null,
+        demo:        document.getElementById('proj-demo').value.trim()   || null,
+      };
+
+      if (editIdx !== null) projects[editIdx] = project;
+      else projects.push(project);
+
+      submitBtn.disabled = true;
+      setStatus('Saving…', 'neutral');
+      try {
+        await commitProjects(editIdx !== null ? `Update "${project.title}"` : `Add "${project.title}"`);
+        resetForm();
+        renderList();
+        setStatus('Saved!', 'success');
+      } catch (e) {
+        setStatus(e.message, 'error');
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+
+    cancelBtn.addEventListener('click', resetForm);
+
+    disconnectBtn.addEventListener('click', () => {
+      localStorage.removeItem('gh_admin_token');
+      token = '';
+      adminPanel.style.display  = 'none';
+      setupSection.style.display = 'block';
+    });
+
+    connectBtn.addEventListener('click', async () => {
+      const t = tokenInput.value.trim();
+      if (!t) return;
+      token = t;
+      connectBtn.textContent  = 'Connecting…';
+      connectBtn.disabled     = true;
+      connectError.style.display = 'none';
+      try {
+        await loadProjects();
+        localStorage.setItem('gh_admin_token', token);
+        setupSection.style.display = 'none';
+        adminPanel.style.display   = 'block';
+        renderList();
+      } catch (e) {
+        connectError.textContent   = `Could not connect: ${e.message}`;
+        connectError.style.display = 'inline';
+        token = '';
+      } finally {
+        connectBtn.textContent = 'Connect';
+        connectBtn.disabled    = false;
+      }
+    });
+
+    // Auto-connect if token already stored
+    if (token) {
+      loadProjects()
+        .then(() => {
+          setupSection.style.display = 'none';
+          adminPanel.style.display   = 'block';
+          renderList();
+        })
+        .catch(() => {
+          localStorage.removeItem('gh_admin_token');
+          token = '';
+        });
+    }
+  </script>
+</body>
+
+</html>
