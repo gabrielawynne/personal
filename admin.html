@@ -152,6 +152,17 @@
       pointer-events: none;
       box-sizing: border-box;
     }
+    .crop-handle {
+      display: none;
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: #fff;
+      border: 1.5px solid rgba(0,0,0,0.4);
+      border-radius: 2px;
+      z-index: 10;
+      box-sizing: border-box;
+    }
     #crop-footer { display: flex; gap: 12px; }
     /* Dark mode */
     html.dark .admin-card { background: #0d1b2a; border-color: #21262d; }
@@ -312,6 +323,8 @@
     let cropSel      = { x: 0, y: 0, w: 0, h: 0 };
     let cropDragging  = false;
     let cropDragStart = { x: 0, y: 0 };
+    let cropResizing      = null;
+    let cropResizeStart   = null;
 
     // Existing DOM refs
     const setupSection  = document.getElementById('setup-section');
@@ -341,6 +354,18 @@
     const cropSelDiv       = document.getElementById('crop-sel');
     const cropConfirmBtn   = document.getElementById('crop-confirm-btn');
     const cropCancelBtn    = document.getElementById('crop-cancel-btn');
+
+    const HANDLE_NAMES   = ['nw','n','ne','e','se','s','sw','w'];
+    const HANDLE_CURSORS = { nw:'nw-resize', n:'n-resize', ne:'ne-resize', e:'e-resize', se:'se-resize', s:'s-resize', sw:'sw-resize', w:'w-resize' };
+    const handleEls = {};
+    HANDLE_NAMES.forEach(h => {
+      const el = document.createElement('div');
+      el.className    = 'crop-handle';
+      el.style.cursor = HANDLE_CURSORS[h];
+      el.dataset.handle = h;
+      cropStage.appendChild(el);
+      handleEls[h] = el;
+    });
 
     // ── GitHub helpers ──────────────────────────────────────────────────────
     async function apiFetch(method, body) {
@@ -445,12 +470,30 @@
 
     // ── Crop modal ──────────────────────────────────────────────────────────
     function renderCropSel() {
-      if (cropSel.w < 2 || cropSel.h < 2) { cropSelDiv.style.display = 'none'; return; }
+      if (cropSel.w < 2 || cropSel.h < 2) {
+        cropSelDiv.style.display = 'none';
+        HANDLE_NAMES.forEach(h => { handleEls[h].style.display = 'none'; });
+        return;
+      }
       cropSelDiv.style.display = 'block';
       cropSelDiv.style.left    = cropSel.x + 'px';
       cropSelDiv.style.top     = cropSel.y + 'px';
       cropSelDiv.style.width   = cropSel.w + 'px';
       cropSelDiv.style.height  = cropSel.h + 'px';
+      const { x, y, w, h } = cropSel;
+      const hpos = {
+        nw:{x,y},          n:{x:x+w/2,y},     ne:{x:x+w,y},
+        e: {x:x+w,y:y+h/2},                   se:{x:x+w,y:y+h},
+        s: {x:x+w/2,y:y+h},                   sw:{x,y:y+h},
+        w: {x,y:y+h/2}
+      };
+      HANDLE_NAMES.forEach(name => {
+        const el = handleEls[name];
+        const p  = hpos[name];
+        el.style.display = 'block';
+        el.style.left    = (p.x - 5) + 'px';
+        el.style.top     = (p.y - 5) + 'px';
+      });
     }
 
     function getCropPos(e) {
@@ -487,11 +530,43 @@
     }
 
     cropStage.addEventListener('mousedown', e => {
+      if (e.target.dataset && e.target.dataset.handle) {
+        cropResizing    = e.target.dataset.handle;
+        cropResizeStart = { p: getCropPos(e), sel: { ...cropSel } };
+        return;
+      }
       cropDragStart = getCropPos(e);
       cropSel = { x: cropDragStart.x, y: cropDragStart.y, w: 0, h: 0 };
       cropDragging = true;
     });
+    document.addEventListener('mouseup', () => { cropDragging = false; cropResizing = null; });
     cropStage.addEventListener('mousemove', e => {
+      if (cropResizing) {
+        const p  = getCropPos(e);
+        const s  = cropResizeStart;
+        let { x, y, w, h } = s.sel;
+        const dx = p.x - s.p.x;
+        const dy = p.y - s.p.y;
+        if (cropResizing.includes('e')) w = Math.max(4, s.sel.w + dx);
+        if (cropResizing.includes('s')) h = Math.max(4, s.sel.h + dy);
+        if (cropResizing.includes('w')) {
+          let newX = Math.max(0, Math.min(s.sel.x + dx, s.sel.x + s.sel.w - 4));
+          w = s.sel.w + (s.sel.x - newX);
+          x = newX;
+        }
+        if (cropResizing.includes('n')) {
+          let newY = Math.max(0, Math.min(s.sel.y + dy, s.sel.y + s.sel.h - 4));
+          h = s.sel.h + (s.sel.y - newY);
+          y = newY;
+        }
+        x = Math.max(0, x);
+        y = Math.max(0, y);
+        w = Math.min(w, cropCanvas.width  - x);
+        h = Math.min(h, cropCanvas.height - y);
+        cropSel = { x, y, w, h };
+        renderCropSel();
+        return;
+      }
       if (!cropDragging) return;
       const p = getCropPos(e);
       cropSel = {
@@ -502,7 +577,6 @@
       };
       renderCropSel();
     });
-    cropStage.addEventListener('mouseup',    () => { cropDragging = false; });
     cropStage.addEventListener('mouseleave', () => { cropDragging = false; });
 
     cropStage.addEventListener('touchstart', e => {
