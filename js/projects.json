@@ -3,25 +3,63 @@
     "id": 1,
     "title": "Multiplayer Checkers",
     "description": "A full-stack multiplayer checkers game enabling real-time player interactions via WebSockets.\n\nDesigned persistent data storage using SQLite for user profiles, match history, and session tracking. Utilized Gson for JSON serialization to handle structured client-server communication.\n\nCollaborated in a team of 4 using Git, Agile methods, and modular design principles.",
-    "tags": [
-      "Java",
-      "SQLite",
-      "WebSockets",
-      "Gson"
-    ],
+    "tags": ["Java", "WebSockets", "SQLite", "Gson"],
     "image": "img/1777102489556-multiplayer-checkers.jpg",
-    "github": "https://github.com/gabrielawynne",
+    "github": "https://github.com/gabrielawynne/Checkers",
     "demo": null
   },
   {
-    "id": 1777092499414,
-    "title": "fdgfdgfd",
-    "description": "fdgfdgfdfdgfdgfdfdgfdgfdfdgfdgfdfdgfdgfdfdgfdgfdfdgfdgfd",
-    "tags": [
-      "Java"
-    ],
-    "image": "img/1777103022580-fdgfdgfd.jpg",
-    "github": null,
+    "id": 2,
+    "title": "Healthcare Database System",
+    "description": "A full-stack web application for managing healthcare data including patient records, physician information, consultations, diagnoses, hospital locations, and insurance coverage.\n\nBuilt a RESTful API with FastAPI and MySQL, using Pydantic models for data validation across a relational database schema. The frontend integrates with the API via async JavaScript for full CRUD operations on all entities.",
+    "tags": ["Python", "FastAPI", "MySQL", "JavaScript"],
+    "image": null,
+    "github": "https://github.com/gabrielawynne/healthcare-database",
+    "demo": null
+  },
+  {
+    "id": 3,
+    "title": "8-Puzzle AI Solver",
+    "description": "A pathfinding tool that solves the 8-puzzle problem using four search algorithms — BFS, UCS, Greedy, and A* — where each tile movement costs the value of the tile being moved.\n\nReads start and goal configurations from files, reconstructs the full solution path by tracking parent nodes, and outputs step-by-step move traces. Includes a weighted Manhattan distance heuristic for A* to minimize total move cost.",
+    "tags": ["Python", "A*", "BFS", "Algorithms"],
+    "image": null,
+    "github": "https://github.com/gabrielawynne/ai-puzzle-solver",
+    "demo": null
+  },
+  {
+    "id": 4,
+    "title": "Red-Blue Nim AI",
+    "description": "A command-line implementation of Red-Blue Nim featuring an AI opponent powered by minimax search with alpha-beta pruning.\n\nSupports both standard and misère rule variants with configurable search depth. Includes human-vs-computer gameplay, move validation, and a scoring system based on remaining pile values.",
+    "tags": ["Python", "Minimax", "Alpha-Beta Pruning", "AI"],
+    "image": null,
+    "github": "https://github.com/gabrielawynne/red-blue-nim",
+    "demo": null
+  },
+  {
+    "id": 5,
+    "title": "Custom Unix Shell",
+    "description": "A Unix-like command-line shell written in C, built from scratch to handle input parsing, process creation, and execution.\n\nImplements command history tracking for up to 50 entries, signal handling, and process management via fork/exec. Designed to mirror core behaviors of standard shells like bash.",
+    "tags": ["C", "Unix", "Systems Programming"],
+    "image": null,
+    "github": "https://github.com/gabrielawynne/unix-shell",
+    "demo": null
+  },
+  {
+    "id": 6,
+    "title": "Binary Search Tree",
+    "description": "A C implementation of a binary search tree with dynamic memory management, supporting insertion, search, deletion, and node selection.\n\nIncludes recursive helper functions for tree traversal, bounds validation, and proper memory cleanup. Built with a focus on correctness and edge-case handling across all core BST operations.",
+    "tags": ["C", "Data Structures", "Algorithms"],
+    "image": null,
+    "github": "https://github.com/gabrielawynne/binary-search-tree",
+    "demo": null
+  },
+  {
+    "id": 7,
+    "title": "HTTP Web Server",
+    "description": "A lightweight HTTP web server written in Java that listens on TCP port 8080 and handles incoming GET requests.\n\nUses ServerSocket for connection management and implements request parsing and file retrieval to demonstrate core HTTP protocol mechanics and network programming fundamentals.",
+    "tags": ["Java", "HTTP", "Networking"],
+    "image": null,
+    "github": "https://github.com/gabrielawynne/http-web-server",
     "demo": null
   }
 ]

@@ -31,19 +31,21 @@ updateHeader();
 const hamburger = document.querySelector(".hamburger");
 const nav = document.querySelector("nav");
 
-hamburger.addEventListener("click", () => {
-  const isOpen = nav.classList.toggle("open");
-  hamburger.classList.toggle("open", isOpen);
-  hamburger.setAttribute("aria-expanded", isOpen);
-});
-
-nav.querySelectorAll("a").forEach(link => {
-  link.addEventListener("click", () => {
-    nav.classList.remove("open");
-    hamburger.classList.remove("open");
-    hamburger.setAttribute("aria-expanded", false);
+if (hamburger && nav) {
+  hamburger.addEventListener("click", () => {
+    const isOpen = nav.classList.toggle("open");
+    hamburger.classList.toggle("open", isOpen);
+    hamburger.setAttribute("aria-expanded", isOpen);
   });
-});
+
+  nav.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+      nav.classList.remove("open");
+      hamburger.classList.remove("open");
+      hamburger.setAttribute("aria-expanded", false);
+    });
+  });
+}
 
 const darkToggle = document.querySelector(".dark-toggle");
 
@@ -97,35 +99,31 @@ if (portfolioGrid) {
         const filtered = activeTag ? projects.filter(p => p.tags.includes(activeTag)) : projects;
 
         if (!filtered.length) {
+          portfolioGrid.className = "portfolio-empty-wrap";
           portfolioGrid.innerHTML = '<p class="portfolio-empty">No projects match this filter.</p>';
           return;
         }
 
-        portfolioGrid.innerHTML = filtered.map((p, i) => {
-          const imageHtml = p.image
-            ? `<img src="${p.image}" alt="${p.title}">`
-            : `<div class="img-placeholder"></div>`;
+        portfolioGrid.className = "portfolio-cards";
+        portfolioGrid.innerHTML = filtered.map((p) => {
           const tagsHtml = p.tags.length
-            ? `<ul class="portfolio-project-tags">${p.tags.map(t => `<li>${t}</li>`).join("")}</ul>`
+            ? `<ul class="portfolio-card-tags">${p.tags.map(t => `<li>${t}</li>`).join("")}</ul>`
             : "";
+          const desc = p.description.split("\n\n")[0];
           const githubHtml = p.github
-            ? `<a href="${p.github}" target="_blank" rel="noopener" class="portfolio-github-link">${githubIcon} View on GitHub</a>`
+            ? `<a href="${p.github}" target="_blank" rel="noopener" class="portfolio-github-link">${githubIcon} GitHub</a>`
             : "";
           const demoHtml = p.demo
             ? `<a href="${p.demo}" target="_blank" rel="noopener" class="portfolio-demo-link">Live Demo</a>`
             : "";
-          const descHtml = p.description.split("\n\n").filter(Boolean).map(para => `<p>${para}</p>`).join("");
+          const hasLinks = p.github || p.demo;
 
           return `
-            <div class="portfolio-project${i % 2 !== 0 ? " reverse" : ""}">
-              <div class="portfolio-project-image">${imageHtml}</div>
-              <div class="portfolio-project-content">
-                ${githubHtml}
-                <h3>${p.title}</h3>
-                ${tagsHtml}
-                ${descHtml}
-                ${demoHtml}
-              </div>
+            <div class="portfolio-card">
+              <h3>${p.title}</h3>
+              ${tagsHtml}
+              <p class="portfolio-card-desc">${desc}</p>
+              ${hasLinks ? `<div class="portfolio-card-links">${githubHtml}${demoHtml}</div>` : ""}
             </div>`;
         }).join("");
       }

@@ -176,8 +176,24 @@
     html.dark .btn-edit { color: #7aa2f7; border-color: #7aa2f7; }
     html.dark .btn-edit:hover { background: #7aa2f7; color: #010921; }
     html.dark .image-preview-wrap img { border-color: #21262d; }
+    .admin-desc {
+      margin-bottom: 20px;
+      color: #555;
+      line-height: 1.6;
+    }
+    .admin-label-hint {
+      font-weight: 400;
+      text-transform: none;
+      letter-spacing: 0;
+      color: #aaa;
+    }
+    html.dark .admin-desc { color: #8b949e; }
+    html.dark .admin-label-hint { color: #6b7280; }
     @media (max-width: 600px) {
       .admin-form-row { grid-template-columns: 1fr; }
+      .admin-top { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .project-item { flex-direction: column; align-items: flex-start; }
+      .project-item-btns { align-self: flex-end; }
     }
   </style>
 </head>
@@ -204,7 +220,7 @@
           </div>
           <div class="admin-card">
             <h3>Connect GitHub</h3>
-            <p style="margin-bottom:20px;color:#555;">Enter a GitHub Personal Access Token with <strong>repo</strong> write access. It's stored only in your browser.</p>
+            <p class="admin-desc">Enter a GitHub Personal Access Token with <strong>repo</strong> write access. It's stored only in your browser.</p>
             <div class="form-group" style="max-width:480px;">
               <label for="token-input">Personal Access Token</label>
               <input type="password" id="token-input" placeholder="ghp_...">
@@ -236,11 +252,11 @@
                 <textarea id="proj-desc" required placeholder="What does it do?" rows="3"></textarea>
               </div>
               <div class="form-group">
-                <label for="proj-tags">Tags <span style="font-weight:400;text-transform:none;letter-spacing:0;color:#aaa;">(comma-separated)</span></label>
+                <label for="proj-tags">Tags <span class="admin-label-hint">(comma-separated)</span></label>
                 <input type="text" id="proj-tags" placeholder="Java, Python, React">
               </div>
               <div class="form-group">
-                <label>Image <span style="font-weight:400;text-transform:none;letter-spacing:0;color:#aaa;">(optional)</span></label>
+                <label>Image <span class="admin-label-hint">(optional)</span></label>
                 <div class="image-browse-row">
                   <button type="button" id="browse-btn" class="btn-secondary" style="white-space:nowrap;">Browse & Crop</button>
                   <input type="url" id="proj-image" placeholder="Or paste a URL" style="flex:1;">
