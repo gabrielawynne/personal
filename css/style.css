@@ -15,7 +15,8 @@ html {
   color: #222;
   font-size: 1em;
   line-height: 1.4;
-  overflow-x: hidden;
+  overflow-x: clip;
+  overscroll-behavior: none;
 }
 
 /*
@@ -284,7 +285,7 @@ body {
   background-color: #1B365D;
   margin: 0;
   padding-top: 32px;
-  overflow-x: hidden;
+  overflow-x: clip;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -997,6 +998,22 @@ nav a:hover {
     width: 100%;
     border-radius: 0;
   }
+  body {
+    padding-top: 0;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  header.onscroll {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+  }
+  body {
+    padding-top: 100px;
+  }
 }
 
 @media screen and (max-width: 768px) {
@@ -1033,9 +1050,6 @@ nav a:hover {
     border-bottom: none;
   }
 
-  header {
-    position: relative;
-  }
 }
 
 /* ==========================================================================
